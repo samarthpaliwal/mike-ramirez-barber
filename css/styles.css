@@ -41,6 +41,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+[hidden] { display: none !important; }
 img { max-width: 100%; display: block; }
 a { color: var(--gold); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { color: var(--gold-bright); }
@@ -479,3 +480,30 @@ p { margin: 0 0 1em; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- Sign-in and account pages ---------- */
+.auth-wrap { max-width: 520px; margin: 0 auto; display: grid; gap: 20px; }
+.auth-card h2 { font-size: 1.5rem; }
+.auth-card .btn { width: 100%; }
+.auth-card form { display: grid; gap: 16px; }
+.auth-card .form-status { margin-top: 12px; }
+.auth-divider { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; }
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.code-input { text-align: center; font-size: 1.6rem !important; letter-spacing: .4em; font-variant-numeric: tabular-nums; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--gold); font: inherit; text-decoration: underline; cursor: pointer; }
+.auth-points { list-style: none; margin: 0; padding: 0; color: var(--muted); font-size: .92rem; }
+.auth-points li { padding-left: 26px; position: relative; margin-bottom: 8px; }
+.auth-points li::before { content: "✓"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+
+.request-list { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
+@media (min-width: 860px) { .request-list { grid-template-columns: repeat(2, 1fr); } }
+.request:hover { transform: none; }
+.request.is-handled { opacity: .62; }
+.request__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.request__head h3 { margin: 0; }
+.request__row { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.request__label { color: var(--gold); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; padding-top: 3px; }
+.request__value { overflow-wrap: anywhere; white-space: pre-wrap; }
+.request .btn { margin-top: 14px; }
+.pill { flex: none; font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--gold); color: var(--black); }
+.pill--done { background: transparent; color: var(--muted); border: 1px solid var(--line); }

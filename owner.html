@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Owner Page | Mike Ramirez, Barber</title>
+  <meta name="description" content="Booking requests received through the website.">
+  <!-- Private page: keep it out of Google. -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0B0B0C">
+
+  <!-- EDIT: replace YOUR-SITE.netlify.app (here and below) with the real web address once the site is live. -->
+  <link rel="canonical" href="https://YOUR-SITE.netlify.app/owner.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mike Ramirez, Barber">
+  <meta property="og:title" content="Owner Page | Mike Ramirez, Barber">
+  <meta property="og:description" content="Booking requests received through the website.">
+  <meta property="og:url" content="https://YOUR-SITE.netlify.app/owner.html">
+  <meta property="og:image" content="https://YOUR-SITE.netlify.app/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add("js");</script>
+
+  <!-- LocalBusiness schema: helps Google show the shop's address and phone.
+       EDIT: replace YOUR-SITE.netlify.app with the real web address, and add
+       opening hours here once you have them (see README.md). -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarberShop",
+    "name": "Mike Ramirez, Barber at Double Edged Barbershop",
+    "description": "Licensed barber with 15+ years of experience. Adult and kids haircuts, fades, tapers and beard trims in Tucson, AZ.",
+    "url": "https://YOUR-SITE.netlify.app/",
+    "image": "https://YOUR-SITE.netlify.app/images/og-image.jpg",
+    "telephone": "+1-520-548-9830",
+    "priceRange": "$35-$45",
+    "paymentAccepted": "Apple Pay, Cash App, Zelle",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1065 E Tucson Marketplace Blvd",
+      "addressLocality": "Tucson",
+      "addressRegion": "AZ",
+      "addressCountry": "US"
+    },
+    "sameAs": ["https://www.instagram.com/MikeTheBarber92/"],
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": "https://getsqr.co/michael-ramirez-6"
+    }
+  }
+  </script>
+</head>
+<body data-page="owner">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap nav">
+      <!-- Text logo -->
+      <a class="logo" href="index.html">Mike Ramirez, <span>Barber</span></a>
+      <nav aria-label="Main">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Cuts Gallery</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="account.html">My Account</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn--gold btn--sm" href="https://getsqr.co/michael-ramirez-6" target="_blank" rel="noopener">Book Now</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="wrap" id="account-content" hidden>
+        <span class="eyebrow">Owner page</span>
+        <h1 id="greeting" style="font-size:clamp(2rem,6vw,3.2rem)">Loading…</h1>
+        <p class="lead" id="summary"></p>
+        <div class="btn-row">
+          <a class="btn btn--ghost" href="account.html">My Own Requests</a>
+          <button type="button" class="btn btn--ghost" id="sign-out">Sign Out</button>
+        </div>
+        <ul class="request-list" id="request-list" aria-label="Booking requests"></ul>
+      </div>
+      <noscript><div class="wrap"><p>Please turn on JavaScript to see your account.</p></div></noscript>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <a class="logo" href="index.html">Mike Ramirez, <span>Barber</span></a>
+          <p style="margin-top:12px">Licensed barber, 15+ years of experience.<br>Double Edged Barbershop, Tucson, AZ.</p>
+        </div>
+        <div>
+          <h2>Visit</h2>
+          <ul>
+            <li>1065 E Tucson Marketplace Blvd<br>Tucson, AZ</li>
+            <li><a href="tel:+15205489830">(520) 548-9830</a></li>
+            <!-- EDIT: shop hours. Replace this line with real hours, e.g. "Tue–Sat 9am–6pm". -->
+            <li>Hours: by appointment</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="services.html">Services and pricing</a></li>
+            <li><a href="gallery.html">Cuts gallery</a></li>
+            <li><a href="booking.html">Booking and payment</a></li>
+            <li><a href="login.html">Sign in</a></li>
+            <li><a href="https://www.instagram.com/MikeTheBarber92/" target="_blank" rel="noopener">Instagram @MikeTheBarber92</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-bottom">© <span id="year">2026</span> Mike Ramirez, Barber. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/account.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

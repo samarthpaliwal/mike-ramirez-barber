@@ -1,32 +1,16 @@
 # Netlify settings. You should not need to change this file.
 
 [build]
-  publish = "."                     # the site is plain HTML — no build step
-  functions = "netlify/functions"   # chatbot + booking email
+  # The site is plain HTML. This just copies the public files into "dist" so
+  # that only the website itself is published (not the function source code).
+  command = "rm -rf dist && mkdir dist && cp -R *.html css js images dist/"
+  publish = "dist"
+  functions = "netlify/functions"   # chat assistant, booking email, sign-in
 
 [functions]
   node_bundler = "esbuild"
 
-# Keep project files that aren't part of the website from being served.
-[[redirects]]
-  from = "/netlify/*"
-  to = "/index.html"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/package.json"
-  to = "/index.html"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/README.md"
-  to = "/index.html"
-  status = 404
-  force = true
-
-# Cache photos, styles and scripts so repeat visits are fast.
+# Cache photos so repeat visits are fast.
 [[headers]]
   for = "/images/*"
   [headers.values]
@@ -36,4 +20,16 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Signed-in pages are never cached.
+[[headers]]
+  for = "/account.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/owner.html"
+  [headers.values]
+    Cache-Control = "no-store"

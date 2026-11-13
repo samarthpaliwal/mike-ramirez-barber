@@ -1,17 +1,23 @@
 # Mike Ramirez, Barber — website
 
-A four-page site (plain HTML, CSS and JavaScript — no framework) with an AI chat
-assistant and a booking request form that emails Mike.
+A website in plain HTML, CSS and JavaScript (no framework) with an AI chat
+assistant, a booking request form that emails Mike, and password-free sign-in
+with Face ID / Touch ID for clients and for Mike.
 
 ```
 index.html        Home (about Mike, badges, location, Instagram)
 services.html     Services and pricing
 gallery.html      Cuts gallery with pop-up technique steps
 booking.html      Booking link, request form, payment, policies
+login.html        Sign in with Face ID / Touch ID (passkeys)
+account.html      A client's own booking requests (signed-in only)
+owner.html        Mike's page: every booking request (owner only)
 css/styles.css    All styling (colours and fonts are at the top)
-js/               main.js, chat.js, gallery.js, booking.js
+js/               main.js, chat.js, gallery.js, booking.js, auth.js, account.js
 images/           Photos — placeholders for now
-netlify/functions chat.mjs (AI assistant), booking.mjs (booking emails)
+netlify/functions chat.mjs (AI assistant), booking.mjs (booking emails),
+                  auth.mjs (sign-in), account.mjs (account data)
+netlify/lib       Code shared by the functions (email, sessions, storage)
 netlify.toml      Netlify settings
 ```
 
@@ -35,6 +41,8 @@ Search the project for those two words to find them all.
 - [ ] **API keys.** Set `ANTHROPIC_API_KEY` (chat assistant) and
       `RESEND_API_KEY` (booking emails) in Netlify. Never paste keys into the
       code.
+- [ ] **Sign-in settings.** Set `SESSION_SECRET` in Netlify (step 3). The
+      owner page opens for `OWNER_EMAIL`, or `NOTIFY_EMAIL` if that isn't set.
 - [ ] **Shop hours.** Replace "By appointment" in three places: the footer of
       each page, the location block on `index.html` and `booking.html`, and the
       `HOURS:` line in `netlify/functions/chat.mjs` so the assistant can answer.
@@ -83,9 +91,8 @@ GitHub (drag-and-drop uploads do not build functions).
    repository" instructions.
 
 2. **Create the Netlify site.** In Netlify: **Add new project → Import an
-   existing project → GitHub**, then pick the repository. Leave the build
-   command empty; the publish directory (`.`) and functions folder are already
-   set by `netlify.toml`. Click **Deploy**.
+   existing project → GitHub**, then pick the repository. Leave every build
+   setting as it is — `netlify.toml` already sets them. Click **Deploy**.
 
 3. **Set the environment variables.** In Netlify open **Project configuration →
    Environment variables → Add a variable** (called *Site configuration* on
@@ -97,6 +104,8 @@ GitHub (drag-and-drop uploads do not build functions).
    | `RESEND_API_KEY` | Your Resend API key (starts with `re_`) |
    | `NOTIFY_EMAIL` | The inbox that should receive booking requests |
    | `FROM_EMAIL` | *(optional until a domain is verified)* e.g. `Mike Ramirez, Barber <bookings@yourdomain.com>` |
+   | `SESSION_SECRET` | A long random secret for sign-in. Generate one by running `openssl rand -hex 32` in a terminal and pasting the result. Keep it private. |
+   | `OWNER_EMAIL` | *(optional)* The email that gets the owner page. Defaults to `NOTIFY_EMAIL`. |
 
 4. **Redeploy** so the functions pick up the variables: **Deploys → Trigger
    deploy → Deploy project**.
@@ -142,7 +151,54 @@ netlify dev
 
 ---
 
-## 5. Three optional upgrades
+## 5. Sign-in with Face ID / Touch ID
+
+The site uses **passkeys**, the standard behind "Sign in with Face ID". There
+are no passwords at all.
+
+**How it works for a person**
+
+1. On `login.html` they enter their name and email. The site emails a 6-digit
+   code to prove the address is theirs.
+2. They type the code, and their phone or computer asks for Face ID / Touch ID
+   and saves a passkey to its keychain (iCloud Keychain on Apple devices, so it
+   syncs to their other Apple devices).
+3. From then on, **Sign in with Face ID / Touch ID** is one tap.
+4. New phone that doesn't have the passkey? They repeat steps 1–2 on it.
+
+**Who sees what**
+
+- **Clients** land on `account.html` and see only the booking requests sent
+  with their own email address.
+- **Mike** lands on `owner.html` and sees every request, with tap-to-call and
+  a "Mark as handled" button. He is whoever can receive email at `OWNER_EMAIL`
+  — set that up first, then have Mike do steps 1–2 on his phone.
+
+**What keeps it secure**
+
+- Only the public half of each passkey is stored. Faces and fingerprints never
+  leave the device.
+- Every sign-in requires Face ID / Touch ID (or the device passcode).
+- The session is a signed, HttpOnly, Secure cookie that lasts 7 days.
+- All access rules are enforced in the functions, not in the page.
+- Accounts and requests are stored in Netlify Blobs (built in — nothing to set
+  up).
+
+**Things to know**
+
+- Sign-up needs the emailed code, so it only works for clients once a domain
+  is verified in Resend (section 2). Before that, only the address you signed
+  up to Resend with can receive a code.
+- Passkeys are tied to the website's address. If you later move from
+  `something.netlify.app` to your own domain, everyone sets up their device
+  once more on the new address. Decide on the final domain early if you can.
+- Booking requests are saved from the moment this version is deployed.
+  Requests made before that only exist as emails.
+- It needs HTTPS (Netlify provides it) or `localhost`.
+
+---
+
+## 6. Three optional upgrades
 
 1. **Reviews section.** Add a strip of client reviews to the home page — typed
    in by hand to start, or pulled live from Google with the Places API.

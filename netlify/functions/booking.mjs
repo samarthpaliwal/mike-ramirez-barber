@@ -4,10 +4,16 @@
 
    When the booking form is submitted this function:
      1. emails the request to Mike, and
-     2. sends the client an automatic confirmation.
+     2. sends the client an automatic confirmation, and
+     3. saves the request so Mike sees it on the owner page (owner.html) and
+        the client sees it in their account (account.html).
    Emails are sent with Resend (https://resend.com), a transactional email
    service with a free tier.
    ========================================================================== */
+
+import crypto from "node:crypto";
+import { emailConfigured, sendEmail, shell, esc } from "../lib/email.mjs";
+import { bookingStore, normalizeEmail } from "../lib/session.mjs";
 
 /* ---- CONFIG — the settings to change ----------------------------------- */
 
@@ -17,15 +23,8 @@
 // address on the right.
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "CHANGE-ME@example.com";
 
-// The "from" address on both emails. It must be on a domain you have verified
-// in Resend, e.g. "Mike Ramirez, Barber <bookings@yourdomain.com>".
-// Until a domain is verified, Resend's test sender below only delivers to the
-// email address you signed up to Resend with — so Mike's notification works
-// if NOTIFY_EMAIL is that address, but client confirmations will not send.
-const FROM_EMAIL = process.env.FROM_EMAIL || "Mike Ramirez, Barber <onboarding@resend.dev>";
-
-// The Resend API key. Set RESEND_API_KEY in Netlify — never paste it here.
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+// The "from" address (FROM_EMAIL) and the Resend key (RESEND_API_KEY) are
+// read in netlify/lib/email.mjs. Set both in Netlify — never paste keys here.
 
 const PHONE = "(520) 548-9830";
 const BOOKING_LINK = "https://getsqr.co/michael-ramirez-6";
@@ -36,19 +35,7 @@ const SERVICES = ["Adult Haircut", "Adult Haircut and Beard", "Kids Haircut"];
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
-const esc = (value) =>
-  String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-
 const clean = (value, max) => (typeof value === "string" ? value.trim().slice(0, max) : "");
-
-async function sendEmail({ to, subject, html, replyTo }) {
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM_EMAIL, to: [to], subject, html, reply_to: replyTo }),
-  });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
-}
 
 function prettyDate(iso) {
   const d = new Date(`${iso}T12:00:00Z`);
@@ -63,14 +50,6 @@ function prettyTime(hhmm) {
   const h = Number(match[1]);
   return `${h % 12 || 12}:${match[2]} ${h < 12 ? "AM" : "PM"}`;
 }
-
-const shell = (inner) => `
-<div style="background:#0B0B0C;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;color:#F4F1EA">
-  <div style="max-width:520px;margin:0 auto;background:#1A1A1D;border:1px solid #2E2E33;border-radius:12px;padding:28px">
-    <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#F4F1EA">Mike Ramirez, <span style="color:#C9A24B;font-style:italic">Barber</span></p>
-    ${inner}
-  </div>
-</div>`;
 
 const row = (label, value) =>
   `<tr><td style="padding:8px 12px 8px 0;color:#C9A24B;font-size:13px;vertical-align:top;white-space:nowrap">${label}</td><td style="padding:8px 0;color:#F4F1EA;font-size:15px">${value}</td></tr>`;
@@ -103,7 +82,16 @@ export default async (req) => {
   if (!SERVICES.includes(data.service)) return json({ error: "Please choose a service." }, 400);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data.date) || !/^\d{2}:\d{2}$/.test(data.time)) return json({ error: "Please choose a date and time." }, 400);
 
-  if (!RESEND_API_KEY || NOTIFY_EMAIL === "CHANGE-ME@example.com") {
+  // Save the request so it shows up on the owner page and in the client's
+  // account. If saving fails the email below still goes out.
+  try {
+    const id = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+    await bookingStore().setJSON(id, { ...data, email: normalizeEmail(data.email), createdAt: new Date().toISOString(), handled: false });
+  } catch (error) {
+    console.error("Could not save the booking request:", error);
+  }
+
+  if (!emailConfigured() || NOTIFY_EMAIL === "CHANGE-ME@example.com") {
     console.error("Booking email is not configured — set RESEND_API_KEY and NOTIFY_EMAIL in Netlify (see README.md).");
     return json({ error: "Booking email is not set up yet." }, 500);
   }

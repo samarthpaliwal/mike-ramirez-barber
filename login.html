@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign In | Mike Ramirez, Barber</title>
+  <meta name="description" content="Sign in with Face ID or Touch ID to see your booking requests with Mike Ramirez, Barber. No password needed.">
+  <!-- Private page: keep it out of Google. -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0B0B0C">
+
+  <!-- EDIT: replace YOUR-SITE.netlify.app (here and below) with the real web address once the site is live. -->
+  <link rel="canonical" href="https://YOUR-SITE.netlify.app/login.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mike Ramirez, Barber">
+  <meta property="og:title" content="Sign In | Mike Ramirez, Barber">
+  <meta property="og:description" content="Sign in with Face ID or Touch ID to see your booking requests with Mike Ramirez, Barber. No password needed.">
+  <meta property="og:url" content="https://YOUR-SITE.netlify.app/login.html">
+  <meta property="og:image" content="https://YOUR-SITE.netlify.app/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add("js");</script>
+
+  <!-- LocalBusiness schema: helps Google show the shop's address and phone.
+       EDIT: replace YOUR-SITE.netlify.app with the real web address, and add
+       opening hours here once you have them (see README.md). -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarberShop",
+    "name": "Mike Ramirez, Barber at Double Edged Barbershop",
+    "description": "Licensed barber with 15+ years of experience. Adult and kids haircuts, fades, tapers and beard trims in Tucson, AZ.",
+    "url": "https://YOUR-SITE.netlify.app/",
+    "image": "https://YOUR-SITE.netlify.app/images/og-image.jpg",
+    "telephone": "+1-520-548-9830",
+    "priceRange": "$35-$45",
+    "paymentAccepted": "Apple Pay, Cash App, Zelle",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1065 E Tucson Marketplace Blvd",
+      "addressLocality": "Tucson",
+      "addressRegion": "AZ",
+      "addressCountry": "US"
+    },
+    "sameAs": ["https://www.instagram.com/MikeTheBarber92/"],
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": "https://getsqr.co/michael-ramirez-6"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap nav">
+      <!-- Text logo -->
+      <a class="logo" href="index.html">Mike Ramirez, <span>Barber</span></a>
+      <nav aria-label="Main">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="gallery.html">Cuts Gallery</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="login.html" aria-current="page">Sign In</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn--gold btn--sm" href="https://getsqr.co/michael-ramirez-6" target="_blank" rel="noopener">Book Now</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap center">
+        <span class="eyebrow">Your account</span>
+        <h1>Sign in.</h1>
+        <p class="lead">No passwords. Use Face ID, Touch ID or your device's screen lock.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap auth-wrap">
+        <p class="note-bar" id="passkey-unsupported" hidden>This browser doesn't support Face ID / Touch ID sign-in. Please update it, or open this page in Safari or Chrome.</p>
+
+        <div class="card auth-card">
+          <h2>Welcome back</h2>
+          <p class="muted">Already set up on this device or in your keychain? Sign in with one tap.</p>
+          <button type="button" class="btn btn--gold btn--lg" id="passkey-signin">Sign in with Face ID / Touch ID</button>
+          <p class="form-status" id="signin-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="auth-divider">or</div>
+
+        <div class="card auth-card">
+          <h2>First time, or a new device?</h2>
+          <p class="muted">We'll email you a 6-digit code to confirm it's you, then save a passkey to your keychain.</p>
+
+          <form id="setup-start">
+            <div class="field">
+              <label for="s-name">Name</label>
+              <input id="s-name" name="name" type="text" autocomplete="name" required maxlength="80">
+            </div>
+            <div class="field">
+              <label for="s-email">Email <small>(use the one you book with)</small></label>
+              <input id="s-email" name="email" type="email" autocomplete="username webauthn" required maxlength="120">
+            </div>
+            <button class="btn btn--ghost" type="submit">Email Me a Code</button>
+          </form>
+
+          <form id="setup-code" hidden>
+            <div class="field">
+              <label for="s-code">6-digit code</label>
+              <input class="code-input" id="s-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+            </div>
+            <button class="btn btn--gold" type="submit">Verify and Set Up Face ID / Touch ID</button>
+            <p class="muted center" style="margin:0"><button type="button" class="link-btn" id="setup-restart">Use a different email</button></p>
+          </form>
+
+          <p class="form-status" id="setup-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <ul class="auth-points">
+          <li>There is no password to remember, reuse or leak.</li>
+          <li>Your passkey is stored in your device's keychain (iCloud Keychain on iPhone and Mac) and unlocks only with your face, fingerprint or screen lock.</li>
+          <li>Your face and fingerprint never leave your device. This site never sees them.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <a class="logo" href="index.html">Mike Ramirez, <span>Barber</span></a>
+          <p style="margin-top:12px">Licensed barber, 15+ years of experience.<br>Double Edged Barbershop, Tucson, AZ.</p>
+        </div>
+        <div>
+          <h2>Visit</h2>
+          <ul>
+            <li>1065 E Tucson Marketplace Blvd<br>Tucson, AZ</li>
+            <li><a href="tel:+15205489830">(520) 548-9830</a></li>
+            <!-- EDIT: shop hours. Replace this line with real hours, e.g. "Tue–Sat 9am–6pm". -->
+            <li>Hours: by appointment</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="services.html">Services and pricing</a></li>
+            <li><a href="gallery.html">Cuts gallery</a></li>
+            <li><a href="booking.html">Booking and payment</a></li>
+            <li><a href="login.html">Sign in</a></li>
+            <li><a href="https://www.instagram.com/MikeTheBarber92/" target="_blank" rel="noopener">Instagram @MikeTheBarber92</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-bottom">© <span id="year">2026</span> Mike Ramirez, Barber. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>
