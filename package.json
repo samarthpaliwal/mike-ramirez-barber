@@ -1,0 +1,16 @@
+{
+  "name": "mike-ramirez-barber",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website for Mike Ramirez, Barber — static pages plus two Netlify Functions (chat assistant and booking email).",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

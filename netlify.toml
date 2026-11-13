@@ -1,0 +1,39 @@
+# Netlify settings. You should not need to change this file.
+
+[build]
+  publish = "."                     # the site is plain HTML — no build step
+  functions = "netlify/functions"   # chatbot + booking email
+
+[functions]
+  node_bundler = "esbuild"
+
+# Keep project files that aren't part of the website from being served.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/index.html"
+  status = 404
+  force = true
+
+# Cache photos, styles and scripts so repeat visits are fast.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
